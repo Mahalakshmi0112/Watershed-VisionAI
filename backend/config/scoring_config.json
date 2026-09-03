@@ -1,0 +1,15 @@
+{
+  "weights": {
+    "w_condition": 0.45,
+    "w_satellite": 0.25,
+    "w_forecast": 0.30
+  },
+  "tier_boundaries": {
+    "healthy_max": 30.0,
+    "monitor_max": 65.0,
+    "urgent_min": 65.01
+  },
+  "forecast": {
+    "min_real_observations": 3
+  }
+}

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Large/model/data files
+*.pt
+*.pth
+*.onnx
+*.h5
+*.pkl
+
+# Logs
+*.log

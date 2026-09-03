@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom Leaflet Map Dark Mode styling */
+.dark .leaflet-container {
+  background-color: #0f172a !important;
+}
+
+/* Dark mode theme filter for free OpenStreetMap tiles - no API key needed */
+.dark .leaflet-tile-pane {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+.dark .leaflet-popup-content-wrapper, 
+.dark .leaflet-popup-tip {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
