@@ -86,6 +86,101 @@ def test_gis_geojson_parser():
     assert records[0]["name"] == "Ulhas Sub-Watershed"
     assert records[0]["boundary_type"] == "watershed"
 
+def test_gis_boundary_persistence_and_api_roundtrip():
+    from fastapi.testclient import TestClient
+    from backend.main import app
+    from backend.api.deps import create_access_token
+    from backend.db.session import SessionLocal
+    from backend.db.models import GISBoundary
+
+    client = TestClient(app)
+
+    # Real watershed AOI from ISRO/NRSC Bhuvan for Srikakulam IWMP-24 Chinnagora
+    polygon_geojson = {
+        "type": "Polygon",
+        "coordinates": [
+            [[83.55, 18.62], [83.68, 18.62], [83.68, 18.75], [83.55, 18.75], [83.55, 18.62]]
+        ]
+    }
+
+    feature_collection = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Srikakulam IWMP-24 Chinnagora",
+                    "state": "Andhra Pradesh",
+                    "district": "Srikakulam"
+                },
+                "geometry": polygon_geojson
+            }
+        ]
+    }
+
+    admin_token = create_access_token(data={"sub": "admin", "role": "admin"})
+    headers = {"Authorization": f"Bearer {admin_token}"}
+
+    # Ingest via API
+    upload_res = client.post("/api/v1/gis/import?boundary_type=watershed", json=feature_collection, headers=headers)
+    assert upload_res.status_code == 200
+    upload_data = upload_res.json()
+    assert upload_data["status"] == "success"
+
+    # Assert the geom column is NOT null after ingestion
+    db = SessionLocal()
+    try:
+        boundary = (
+            db.query(GISBoundary)
+            .filter(GISBoundary.name == "Srikakulam IWMP-24 Chinnagora")
+            .order_by(GISBoundary.id.desc())
+            .first()
+        )
+        assert boundary is not None
+        assert boundary.geom is not None  # Assert geom is NOT null
+        boundary_id = boundary.id
+    finally:
+        db.close()
+
+    # Fetch back via new GET endpoint
+    get_res = client.get(f"/api/v1/gis/boundaries/{boundary_id}")
+    assert get_res.status_code == 200
+    feature = get_res.json()
+
+    assert feature["type"] == "Feature"
+    assert feature["id"] == boundary_id
+    assert feature["properties"]["name"] == "Srikakulam IWMP-24 Chinnagora"
+    assert feature["geometry"] is not None
+    assert feature["geometry"]["type"] == "Polygon"
+
+    # Assert returned GeoJSON coordinates match input within floating point tolerance
+    expected_coords = polygon_geojson["coordinates"]
+    actual_coords = feature["geometry"]["coordinates"]
+
+    assert len(actual_coords) == len(expected_coords)
+    for exp_ring, act_ring in zip(expected_coords, actual_coords):
+        assert len(act_ring) == len(exp_ring)
+        for exp_pt, act_pt in zip(exp_ring, act_ring):
+            assert pytest.approx(exp_pt[0], abs=1e-5) == act_pt[0]
+            assert pytest.approx(exp_pt[1], abs=1e-5) == act_pt[1]
+
+def test_gis_postgis_conversion_roundtrip():
+    from shapely.geometry import shape, mapping
+    from geoalchemy2.shape import from_shape, to_shape
+    from backend.ingestion.gis_layer_ingest import boundary_geom_to_geojson
+
+    polygon_geojson = {
+        "type": "Polygon",
+        "coordinates": [
+            [[83.55, 18.62], [83.68, 18.62], [83.68, 18.75], [83.55, 18.75], [83.55, 18.62]]
+        ]
+    }
+    s = shape(polygon_geojson)
+    wkb = from_shape(s, srid=4326)
+    geojson_out = boundary_geom_to_geojson(wkb)
+    assert geojson_out["type"] == "Polygon"
+    assert geojson_out["coordinates"] == mapping(s)["coordinates"]
+
 def test_shared_process_field_image_pipeline(tmp_path):
     from backend.ingestion.field_image_ingest import process_field_image
     

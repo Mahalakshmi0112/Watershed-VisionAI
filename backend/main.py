@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from backend.config.settings import settings
 from backend.db.seed import seed_database
-from backend.api import auth, structures, photos, ingestion, gis, inspections, reports
+from backend.api import auth, structures, photos, ingestion, gis, inspections, reports, thematic
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -37,6 +37,8 @@ app.include_router(ingestion.router, prefix=settings.API_V1_STR)
 app.include_router(gis.router, prefix=settings.API_V1_STR)
 app.include_router(inspections.router, prefix=settings.API_V1_STR)
 app.include_router(reports.router, prefix=settings.API_V1_STR)
+app.include_router(thematic.router, prefix=settings.API_V1_STR)
+app.include_router(thematic.router)
 
 @app.on_event("startup")
 def on_startup():

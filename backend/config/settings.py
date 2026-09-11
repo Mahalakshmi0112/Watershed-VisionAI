@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     EE_SERVICE_ACCOUNT: str = os.getenv("EE_SERVICE_ACCOUNT", "")
     EE_PRIVATE_KEY_FILE: str = os.getenv("EE_PRIVATE_KEY_FILE", "")
     
+    # Bhuvan API Credentials
+    BHUVAN_LULC_TOKEN: str = os.getenv("BHUVAN_LULC_TOKEN", "")
+    
     # Storage Paths
     UPLOAD_DIR: str = str(BASE_DIR / "static" / "uploads")
     GRADCAM_DIR: str = str(BASE_DIR / "static" / "gradcam")

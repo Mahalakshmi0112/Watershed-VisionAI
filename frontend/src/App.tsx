@@ -10,6 +10,7 @@ import { PriorityQueuePage } from './pages/PriorityQueuePage';
 import { PredictionsAlertsPage } from './pages/PredictionsAlertsPage';
 import { IngestionAdminPage } from './pages/IngestionAdminPage';
 import { ReportsPage } from './pages/ReportsPage';
+import { WatershedValidationPage } from './pages/WatershedValidationPage';
 
 // Inner shell — needs to be inside AuthProvider to call useAuth
 const AppShell: React.FC = () => {
@@ -34,6 +35,7 @@ const AppShell: React.FC = () => {
           <Route path="/alerts" element={<PredictionsAlertsPage />} />
           <Route path="/ingestion" element={<IngestionAdminPage />} />
           <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/watershed-validation" element={<WatershedValidationPage />} />
         </Routes>
       </main>
     </div>

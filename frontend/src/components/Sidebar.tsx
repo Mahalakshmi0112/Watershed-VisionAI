@@ -21,6 +21,7 @@ export const Sidebar: React.FC = () => {
     { path: '/alerts', label: 'Predictions & Alerts', icon: AlertTriangle },
     { path: '/ingestion', label: 'Data Ingestion', icon: UploadCloud },
     { path: '/reports', label: 'Reports', icon: FileText },
+    { path: '/watershed-validation', label: 'Watershed Validation', icon: FlaskConical },
   ];
 
   const isActive = (path: string, exact?: boolean) => {

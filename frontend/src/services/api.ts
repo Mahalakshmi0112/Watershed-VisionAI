@@ -1,4 +1,4 @@
-import { StructureSummary, StructureDetail } from '../types';
+import { StructureSummary, StructureDetail, ThematicLayerResponse, LulcChangeResponse, LulcClusterResponse } from '../types';
 
 const API_BASE = '/api/v1';
 
@@ -133,3 +133,23 @@ export async function generateReport(region: string = 'All Regions') {
   if (!res.ok) throw new Error('Failed to generate report');
   return await res.json();
 }
+
+export async function fetchThematicLayer(layerName: string): Promise<ThematicLayerResponse> {
+  const res = await fetch(`${API_BASE}/thematic/layers/${encodeURIComponent(layerName)}`);
+  if (!res.ok) throw new Error(`Failed to fetch thematic layer ${layerName}`);
+  return await res.json();
+}
+
+export async function fetchLulcChangeStats(): Promise<LulcChangeResponse> {
+  const res = await fetch(`${API_BASE}/thematic/lulc-change`);
+  if (!res.ok) throw new Error('Failed to fetch LULC change statistics');
+  return await res.json();
+}
+
+export async function fetchLulcClusters(): Promise<LulcClusterResponse> {
+  const res = await fetch(`${API_BASE}/thematic/lulc-clusters`);
+  if (!res.ok) throw new Error('Failed to fetch LULC cluster analysis');
+  return await res.json();
+}
+
+

@@ -46,3 +46,56 @@ export interface StructureDetail extends StructureSummary {
   satellite_series: SatelliteObservation[];
   photos: FieldPhoto[];
 }
+
+export interface ThematicLayerResponse {
+  layer_name: string;
+  wms_layer: string;
+  source: 'live' | 'cached_fallback';
+  data_source: string;
+  data_provenance: string;
+  bbox: [number, number, number, number];
+  content_type: string;
+  image_base64: string;
+  image_url: string;
+}
+
+export interface LulcChangeItem {
+  class: string;
+  t0_area_sqkm: number;
+  t1_area_sqkm: number;
+  change_sqkm: number;
+  change_pct: number;
+}
+
+export interface LulcChangeResponse {
+  data_provenance: string;
+  source: 'live' | 'cached_fallback';
+  data_source: {
+    '2005_06': string;
+    '2018_19': string;
+    [key: string]: string;
+  };
+  t0_year: string;
+  t1_year: string;
+  changes: LulcChangeItem[];
+  raw_data?: Record<string, any>;
+}
+
+export interface LulcClusterItem {
+  class: string;
+  cluster_label: 'expanding' | 'stable' | 'declining';
+  change_pct: number;
+  t0_area_sqkm?: number;
+  t1_area_sqkm?: number;
+  change_sqkm?: number;
+  cluster_id?: number;
+}
+
+export interface LulcClusterResponse {
+  data_provenance: string;
+  clusters: LulcClusterItem[];
+  total_classes: number;
+}
+
+
+

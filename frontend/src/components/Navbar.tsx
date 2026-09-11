@@ -9,7 +9,7 @@ import {
 
 export const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
-  const { role, setRole } = useAuth();
+  const { role, switchRole } = useAuth();
 
   const navItems = [
     { path: '/', label: 'Overview', icon: LayoutDashboard },
@@ -66,7 +66,7 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center bg-gray-100 dark:bg-slate-800 p-1 rounded-lg border border-gray-200 dark:border-slate-700">
               <Shield className="w-4 h-4 ml-1.5 text-gray-500 dark:text-gray-400" />
               <button
-                onClick={() => setRole(role === 'admin' ? 'officer' : 'admin')}
+                onClick={() => switchRole(role === 'admin' ? 'officer' : 'admin')}
                 className="px-2 py-1 text-xs font-semibold rounded transition-colors text-gray-700 dark:text-gray-200 hover:text-emerald-600"
                 title="Click to toggle user role persona"
               >
