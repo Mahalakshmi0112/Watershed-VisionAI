@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from backend.config.settings import settings
 from backend.db.seed import seed_database
-from backend.api import auth, structures, photos, ingestion, gis, inspections, reports, thematic
+from backend.api import auth, structures, photos, ingestion, gis, inspections, reports, thematic, secondary_evidence
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -28,6 +28,7 @@ app.add_middleware(
 # Serve uploaded field photos and Grad-CAM overlays
 app.mount("/static/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 app.mount("/static/gradcam", StaticFiles(directory=settings.GRADCAM_DIR), name="gradcam")
+app.mount("/static/reference", StaticFiles(directory=settings.REFERENCE_STATIC_DIR), name="reference")
 
 # Mount API Routers
 app.include_router(auth.router, prefix=settings.API_V1_STR)
@@ -39,6 +40,7 @@ app.include_router(inspections.router, prefix=settings.API_V1_STR)
 app.include_router(reports.router, prefix=settings.API_V1_STR)
 app.include_router(thematic.router, prefix=settings.API_V1_STR)
 app.include_router(thematic.router)
+app.include_router(secondary_evidence.router, prefix=settings.API_V1_STR)
 
 @app.on_event("startup")
 def on_startup():

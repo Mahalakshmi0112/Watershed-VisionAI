@@ -3,9 +3,9 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import {
-  Sun, Moon, LayoutDashboard, MapPin, ListOrdered,
-  AlertTriangle, UploadCloud, FileText, Layers,
-  ChevronLeft, ChevronRight, Shield, User, FlaskConical, Loader2
+  Sun, Moon, LayoutDashboard, MapPin,
+  AlertTriangle, Layers,
+  ChevronLeft, ChevronRight, Shield, User, FlaskConical, Loader2, Waves
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -17,11 +17,9 @@ export const Sidebar: React.FC = () => {
   const navItems = [
     { path: '/', label: 'Overview', icon: LayoutDashboard, exact: true },
     { path: '/map', label: 'Map View', icon: MapPin },
-    { path: '/queue', label: 'Priority Queue', icon: ListOrdered },
     { path: '/alerts', label: 'Predictions & Alerts', icon: AlertTriangle },
-    { path: '/ingestion', label: 'Data Ingestion', icon: UploadCloud },
-    { path: '/reports', label: 'Reports', icon: FileText },
     { path: '/watershed-validation', label: 'Watershed Validation', icon: FlaskConical },
+    { path: '/secondary-evidence', label: 'Cauvery/Trichy Evidence', icon: Waves },
   ];
 
   const isActive = (path: string, exact?: boolean) => {

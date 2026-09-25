@@ -152,4 +152,38 @@ export async function fetchLulcClusters(): Promise<LulcClusterResponse> {
   return await res.json();
 }
 
+// ──────────────────────────────────────────────────────────────
+//  Secondary Evidence — Cauvery / Trichy API Services
+// ──────────────────────────────────────────────────────────────
+
+export async function fetchSecondaryEvidenceSummary(): Promise<any> {
+  const res = await fetch(`${API_BASE}/secondary-evidence/summary`);
+  if (!res.ok) throw new Error('Failed to fetch secondary evidence summary');
+  return await res.json();
+}
+
+export async function fetchWbisWaterSpread(basin = 'Cauvery Basin', month = 'aug_2026'): Promise<any> {
+  const res = await fetch(`${API_BASE}/secondary-evidence/wbis-water-spread?basin=${encodeURIComponent(basin)}&month=${encodeURIComponent(month)}`);
+  if (!res.ok) throw new Error('Failed to fetch WBIS water spread stats');
+  return await res.json();
+}
+
+export async function fetchTnLulc(stateCode = 'TN', year = '1516'): Promise<any> {
+  const res = await fetch(`${API_BASE}/secondary-evidence/tn-lulc?state_code=${encodeURIComponent(stateCode)}&year=${encodeURIComponent(year)}`);
+  if (!res.ok) throw new Error('Failed to fetch Tamil Nadu LULC thematic data');
+  return await res.json();
+}
+
+export async function fetchDrishtiSample(): Promise<any> {
+  const res = await fetch(`${API_BASE}/secondary-evidence/drishti-sample`);
+  if (!res.ok) throw new Error('Failed to fetch Drishti reference sample');
+  return await res.json();
+}
+
+export async function fetchTrichyPhotos(): Promise<any> {
+  const res = await fetch(`${API_BASE}/secondary-evidence/trichy-photos`);
+  if (!res.ok) throw new Error('Failed to fetch Trichy field photos');
+  return await res.json();
+}
+
 

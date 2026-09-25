@@ -220,11 +220,23 @@ def _fetch_year_lulc(year: str, token: str) -> tuple[List[Dict[str, Any]], str]:
             elapsed = round(time.perf_counter() - start_time, 2)
             print(f"[Bhuvan LULC API] Live call for year={year} | HTTP Status: {resp.status_code} | Response Time: {elapsed}s")
             if resp.status_code == 200:
-                data = resp.json()
-                if isinstance(data, list) and len(data) > 0:
-                    return data, "live"
+                raw_text = resp.text
+                bracket_idx = raw_text.find("[")
+                if bracket_idx != -1:
+                    json_text = raw_text[bracket_idx:]
+                    last_bracket = json_text.rfind("]")
+                    if last_bracket != -1:
+                        json_text = json_text[:last_bracket + 1]
+                    try:
+                        data = json.loads(json_text)
+                        if isinstance(data, list) and len(data) > 0:
+                            return data, "live"
+                        else:
+                            print(f"[Bhuvan LULC API] Year={year} response payload is empty or invalid format: {data}")
+                    except json.JSONDecodeError as jde:
+                        print(f"[Bhuvan LULC API] Year={year} JSON parse error ({jde}): {json_text[:120]}")
                 else:
-                    print(f"[Bhuvan LULC API] Year={year} response payload is empty or invalid format: {data}")
+                    print(f"[Bhuvan LULC API] Year={year} response did not contain JSON array start '[': {raw_text[:120]}")
             else:
                 print(f"[Bhuvan LULC API] Year={year} returned HTTP {resp.status_code} (elapsed {elapsed}s): {resp.text[:120]}")
         except requests.exceptions.Timeout:
@@ -250,7 +262,7 @@ def get_lulc_change_stats() -> Dict[str, Any]:
     falls back to matching cached JSON file. Computes change comparison structure
     and includes top-level data_source showing whether it was 'live' or 'cached_fallback'.
     """
-    token = os.getenv("BHUVAN_LULC_TOKEN", "").strip()
+    token = (settings.BHUVAN_LULC_TOKEN or os.getenv("BHUVAN_LULC_TOKEN", "")).strip()
 
     t0_year = "2005_06"
     t1_year = "2018_19"

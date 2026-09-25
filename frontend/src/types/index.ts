@@ -97,5 +97,121 @@ export interface LulcClusterResponse {
   total_classes: number;
 }
 
+// ──────────────────────────────────────────────────────────────
+//  Secondary Evidence — Cauvery / Trichy Types
+// ──────────────────────────────────────────────────────────────
+
+export interface WbisCategory {
+  area_code: string;
+  category_label: string;
+  total_water_bodies: number;
+  current_water_bodies: number;
+  total_max_area_sqkm: number;
+  current_actual_area_sqkm: number;
+  current_max_area_sqkm: number;
+  capacity_utilization_pct: number;
+  month: string;
+}
+
+export interface WbisResponse {
+  basin: string;
+  month: string;
+  source: 'live' | 'cached_fallback';
+  data_provenance: string;
+  total_water_bodies: number;
+  current_water_bodies: number;
+  water_bodies_active_pct: number;
+  total_max_area_sqkm: number;
+  current_actual_area_sqkm: number;
+  overall_capacity_utilization_pct: number;
+  categories: WbisCategory[];
+  raw_response?: any[];
+}
+
+export interface TnLulcClass {
+  class_name: string;
+  color: string;
+  area_sqkm: number;
+  percent_of_total: number;
+}
+
+export interface TnLulcResponse {
+  state_code: string;
+  year: string;
+  title: string;
+  total_area_sqkm: number;
+  classes: TnLulcClass[];
+  top_classes: TnLulcClass[];
+  total_classes_count: number;
+  chart_image_base64?: string;
+  chart_url: string;
+  stats_url: string;
+  chart_error?: string;
+  stats_error?: string;
+  data_provenance: string;
+  source: string;
+}
+
+export interface CvPredictionOutput {
+  predicted_type: string;
+  type_confidence_pct: number;
+  type_probabilities: Record<string, number>;
+  predicted_condition: string;
+  condition_confidence_pct: number;
+  condition_probabilities: Record<string, number>;
+  condition_score: number;
+  expected_condition_score: number;
+}
+
+export interface DrishtiSampleResponse {
+  title: string;
+  filename: string;
+  source_url: string;
+  data_provenance: string;
+  is_synthetic: boolean;
+  is_genuine_nrsc_field_asset: boolean;
+  taxonomy_breakdown: Record<string, string>;
+  file_size_bytes: number;
+  perceptual_hash: string;
+  cv_prediction: CvPredictionOutput;
+  photo_url: string;
+  gradcam_url: string;
+}
+
+export interface TrichyPhotoItem {
+  id: string;
+  title: string;
+  filename: string;
+  original_upload_name: string;
+  latitude: number;
+  longitude: number;
+  location_name: string;
+  captured_at: string;
+  structure_context: string;
+  data_provenance: string;
+  is_synthetic: boolean;
+  perceptual_hash: string;
+  cv_prediction: CvPredictionOutput;
+  photo_url: string;
+  gradcam_url: string;
+}
+
+export interface TrichyPhotosResponse {
+  region: string;
+  data_provenance: string;
+  total_photos: number;
+  photos: TrichyPhotoItem[];
+}
+
+export interface SecondaryEvidenceSummary {
+  region: string;
+  wbis_water_spread: WbisResponse;
+  tn_lulc: TnLulcResponse;
+  drishti_sample: DrishtiSampleResponse;
+  trichy_field_photos: TrichyPhotoItem[];
+  total_trichy_photos: number;
+  data_provenance_summary: Record<string, string>;
+}
+
 
 

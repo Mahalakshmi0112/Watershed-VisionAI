@@ -1,11 +1,17 @@
 import json
 import os
 from pathlib import Path
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=str(Path(__file__).resolve().parent.parent.parent / ".env"),
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+
     PROJECT_NAME: str = "WatershedVision-AI"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
@@ -37,6 +43,7 @@ class Settings(BaseSettings):
     # Storage Paths
     UPLOAD_DIR: str = str(BASE_DIR / "static" / "uploads")
     GRADCAM_DIR: str = str(BASE_DIR / "static" / "gradcam")
+    REFERENCE_STATIC_DIR: str = str(BASE_DIR / "static" / "reference")
     MODELS_DIR: str = str(BASE_DIR / "models")
     
     # Scoring Config Path
@@ -58,4 +65,5 @@ settings = Settings()
 # Ensure static directories exist
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 os.makedirs(settings.GRADCAM_DIR, exist_ok=True)
+os.makedirs(settings.REFERENCE_STATIC_DIR, exist_ok=True)
 os.makedirs(settings.MODELS_DIR, exist_ok=True)

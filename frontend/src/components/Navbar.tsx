@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { 
-  Sun, Moon, LayoutDashboard, MapPin, Layers, ListOrdered, 
-  AlertTriangle, UploadCloud, FileText, Shield
+  Sun, Moon, LayoutDashboard, MapPin, Layers, 
+  AlertTriangle, Shield
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -14,10 +14,7 @@ export const Navbar: React.FC = () => {
   const navItems = [
     { path: '/', label: 'Overview', icon: LayoutDashboard },
     { path: '/map', label: 'Map View', icon: MapPin },
-    { path: '/queue', label: 'Priority Queue', icon: ListOrdered },
     { path: '/alerts', label: 'Predictions & Alerts', icon: AlertTriangle },
-    { path: '/ingestion', label: 'Data Ingestion', icon: UploadCloud },
-    { path: '/reports', label: 'Reports', icon: FileText }
   ];
 
   return (

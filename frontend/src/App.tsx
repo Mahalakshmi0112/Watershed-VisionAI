@@ -6,11 +6,9 @@ import { Sidebar } from './components/Sidebar';
 import { OverviewPage } from './pages/OverviewPage';
 import { MapViewPage } from './pages/MapViewPage';
 import { StructureDetailPage } from './pages/StructureDetailPage';
-import { PriorityQueuePage } from './pages/PriorityQueuePage';
 import { PredictionsAlertsPage } from './pages/PredictionsAlertsPage';
-import { IngestionAdminPage } from './pages/IngestionAdminPage';
-import { ReportsPage } from './pages/ReportsPage';
 import { WatershedValidationPage } from './pages/WatershedValidationPage';
+import { SecondaryEvidenceCauveryPage } from './pages/SecondaryEvidenceCauveryPage';
 
 // Inner shell — needs to be inside AuthProvider to call useAuth
 const AppShell: React.FC = () => {
@@ -31,11 +29,9 @@ const AppShell: React.FC = () => {
           <Route path="/" element={<OverviewPage />} />
           <Route path="/map" element={<MapViewPage />} />
           <Route path="/structure/:id" element={<StructureDetailPage />} />
-          <Route path="/queue" element={<PriorityQueuePage />} />
           <Route path="/alerts" element={<PredictionsAlertsPage />} />
-          <Route path="/ingestion" element={<IngestionAdminPage />} />
-          <Route path="/reports" element={<ReportsPage />} />
           <Route path="/watershed-validation" element={<WatershedValidationPage />} />
+          <Route path="/secondary-evidence" element={<SecondaryEvidenceCauveryPage />} />
         </Routes>
       </main>
     </div>

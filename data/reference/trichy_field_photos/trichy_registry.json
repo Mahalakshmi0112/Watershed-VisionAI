@@ -1,0 +1,335 @@
+[
+  {
+    "id": "trichy_01",
+    "title": "Ammamandapam Ghat / Cauvery River Channel",
+    "filename": "trichy_cauvery_ammamandapam_01.jpg",
+    "original_upload_name": "media_1789528355393.jpg",
+    "latitude": 10.846135,
+    "longitude": 78.689885,
+    "location_name": "Ammamandapam Road, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 17:31:00",
+    "structure_context": "Cauvery River check/bund barrage & riverfront retaining structure",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "bcc2bd429ee11be0",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 100.0,
+      "type_probabilities": {
+        "check_dam": 0.0,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 100.0
+      },
+      "predicted_condition": "intact",
+      "condition_confidence_pct": 96.0,
+      "condition_probabilities": {
+        "intact": 96.0,
+        "minor_damage": 3.9,
+        "major_damage": 0.1,
+        "non_functional": 0.0
+      },
+      "condition_score": 10.0,
+      "expected_condition_score": 11.2
+    },
+    "photo_url": "/static/reference/trichy/trichy_cauvery_ammamandapam_01.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_cauvery_ammamandapam_01.jpg"
+  },
+  {
+    "id": "trichy_02",
+    "title": "Kollidam River Bridge & Water Supply Aqueduct",
+    "filename": "trichy_kollidam_bridge_highway_02.jpg",
+    "original_upload_name": "media_1789528355472.jpg",
+    "latitude": 10.866037,
+    "longitude": 78.701106,
+    "location_name": "Chennai Tiruchi Highway, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 16:55:00",
+    "structure_context": "Kollidam flood carrier riverbed bridge piers & piped culvert conveyance",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "d595eb2a0bea9129",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 99.9,
+      "type_probabilities": {
+        "check_dam": 0.1,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 99.9
+      },
+      "predicted_condition": "intact",
+      "condition_confidence_pct": 93.5,
+      "condition_probabilities": {
+        "intact": 93.5,
+        "minor_damage": 6.0,
+        "major_damage": 0.3,
+        "non_functional": 0.1
+      },
+      "condition_score": 10.0,
+      "expected_condition_score": 12.1
+    },
+    "photo_url": "/static/reference/trichy/trichy_kollidam_bridge_highway_02.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_kollidam_bridge_highway_02.jpg"
+  },
+  {
+    "id": "trichy_03",
+    "title": "Cauvery Riverbed & Rockfort Viewpoint",
+    "filename": "trichy_cauvery_rockfort_view_03.jpg",
+    "original_upload_name": "media_1789528355530.jpg",
+    "latitude": 10.84613,
+    "longitude": 78.689884,
+    "location_name": "Ammamandapam Road, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 17:31:00",
+    "structure_context": "Cauvery riparian vegetative buffer & sand embankment",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "85c29f6156e49b2d",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 99.9,
+      "type_probabilities": {
+        "check_dam": 0.1,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 99.9
+      },
+      "predicted_condition": "minor_damage",
+      "condition_confidence_pct": 83.3,
+      "condition_probabilities": {
+        "intact": 15.3,
+        "minor_damage": 83.3,
+        "major_damage": 1.3,
+        "non_functional": 0.1
+      },
+      "condition_score": 40.0,
+      "expected_condition_score": 35.9
+    },
+    "photo_url": "/static/reference/trichy/trichy_cauvery_rockfort_view_03.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_cauvery_rockfort_view_03.jpg"
+  },
+  {
+    "id": "trichy_04",
+    "title": "Trichy City Corporation Waterway Enclosure",
+    "filename": "trichy_cauvery_corporation_board_04.jpg",
+    "original_upload_name": "media_1789528355585.jpg",
+    "latitude": 10.84641,
+    "longitude": 78.689545,
+    "location_name": "Ammamandapam Road, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 17:29:00",
+    "structure_context": "Riverfront perimeter protection fence & water regulator gate",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "d1b8c7c607a598f1",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 100.0,
+      "type_probabilities": {
+        "check_dam": 0.0,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 100.0
+      },
+      "predicted_condition": "minor_damage",
+      "condition_confidence_pct": 68.5,
+      "condition_probabilities": {
+        "intact": 25.9,
+        "minor_damage": 68.5,
+        "major_damage": 4.9,
+        "non_functional": 0.7
+      },
+      "condition_score": 40.0,
+      "expected_condition_score": 34.4
+    },
+    "photo_url": "/static/reference/trichy/trichy_cauvery_corporation_board_04.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_cauvery_corporation_board_04.jpg"
+  },
+  {
+    "id": "trichy_05",
+    "title": "Cauvery Bathing Ghat & Revetment Steps",
+    "filename": "trichy_cauvery_ghat_steps_05.jpg",
+    "original_upload_name": "media_1789528355598.jpg",
+    "latitude": 10.846143,
+    "longitude": 78.689929,
+    "location_name": "Ammamandapam Road, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 17:30:00",
+    "structure_context": "Masonry river bank protection & concrete flight of steps",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "8e9e3938523d9d68",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 99.9,
+      "type_probabilities": {
+        "check_dam": 0.1,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 99.9
+      },
+      "predicted_condition": "minor_damage",
+      "condition_confidence_pct": 87.8,
+      "condition_probabilities": {
+        "intact": 10.3,
+        "minor_damage": 87.8,
+        "major_damage": 1.9,
+        "non_functional": 0.1
+      },
+      "condition_score": 40.0,
+      "expected_condition_score": 37.6
+    },
+    "photo_url": "/static/reference/trichy/trichy_cauvery_ghat_steps_05.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_cauvery_ghat_steps_05.jpg"
+  },
+  {
+    "id": "trichy_06",
+    "title": "Kollidam River Crossing & High-Tension Corridor",
+    "filename": "trichy_kollidam_transmission_corridor_06.jpg",
+    "original_upload_name": "media_1789528975250.jpg",
+    "latitude": 10.866125,
+    "longitude": 78.70073,
+    "location_name": "Chennai Tiruchi Highway, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 16:49:00",
+    "structure_context": "Kollidam floodway regulator & reinforced concrete pylons",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "a8d77a2a16a0be5c",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 100.0,
+      "type_probabilities": {
+        "check_dam": 0.0,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 100.0
+      },
+      "predicted_condition": "intact",
+      "condition_confidence_pct": 98.3,
+      "condition_probabilities": {
+        "intact": 98.3,
+        "minor_damage": 1.7,
+        "major_damage": 0.0,
+        "non_functional": 0.0
+      },
+      "condition_score": 10.0,
+      "expected_condition_score": 10.5
+    },
+    "photo_url": "/static/reference/trichy/trichy_kollidam_transmission_corridor_06.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_kollidam_transmission_corridor_06.jpg"
+  },
+  {
+    "id": "trichy_07",
+    "title": "Kollidam Broad Floodplain & Sand Bed",
+    "filename": "trichy_kollidam_floodplain_sandbed_07.jpg",
+    "original_upload_name": "media_1789528983363.jpg",
+    "latitude": 10.866112,
+    "longitude": 78.700756,
+    "location_name": "Chennai Tiruchi Highway, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 16:50:00",
+    "structure_context": "River training earthen bund & dry season water ponding",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "e5fa211d9ce1188f",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 87.6,
+      "type_probabilities": {
+        "check_dam": 12.3,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 87.6
+      },
+      "predicted_condition": "intact",
+      "condition_confidence_pct": 90.9,
+      "condition_probabilities": {
+        "intact": 90.9,
+        "minor_damage": 9.1,
+        "major_damage": 0.0,
+        "non_functional": 0.0
+      },
+      "condition_score": 10.0,
+      "expected_condition_score": 12.8
+    },
+    "photo_url": "/static/reference/trichy/trichy_kollidam_floodplain_sandbed_07.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_kollidam_floodplain_sandbed_07.jpg"
+  },
+  {
+    "id": "trichy_08",
+    "title": "Kollidam Arch Bridge & Water Intake Well",
+    "filename": "trichy_kollidam_rail_road_arch_bridge_08.jpg",
+    "original_upload_name": "media_1789528991236.jpg",
+    "latitude": 10.866104,
+    "longitude": 78.700778,
+    "location_name": "Chennai Tiruchi Highway, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 16:51:00",
+    "structure_context": "Multiple-span arch bridge barrage & municipal intake well",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "a5da036ed09be447",
+    "cv_prediction": {
+      "predicted_type": "check_dam",
+      "type_confidence_pct": 97.4,
+      "type_probabilities": {
+        "check_dam": 97.4,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 2.6
+      },
+      "predicted_condition": "minor_damage",
+      "condition_confidence_pct": 74.2,
+      "condition_probabilities": {
+        "intact": 25.8,
+        "minor_damage": 74.2,
+        "major_damage": 0.0,
+        "non_functional": 0.0
+      },
+      "condition_score": 40.0,
+      "expected_condition_score": 32.3
+    },
+    "photo_url": "/static/reference/trichy/trichy_kollidam_rail_road_arch_bridge_08.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_kollidam_rail_road_arch_bridge_08.jpg"
+  },
+  {
+    "id": "trichy_09",
+    "title": "River Water Pump House & Pipeline Aqueduct",
+    "filename": "trichy_kollidam_pump_house_aqueduct_09.jpg",
+    "original_upload_name": "media_1789528999390.jpg",
+    "latitude": 10.866049,
+    "longitude": 78.701096,
+    "location_name": "Chennai Tiruchi Highway, Srirangam, Tiruchirappalli, Tamil Nadu 620006",
+    "captured_at": "2026-09-12 16:53:00",
+    "structure_context": "Elevated water pump house tower & structural pipeline bridge",
+    "data_provenance": "Field Survey - Srirangam / Cauvery and Kollidam River System, Tiruchirappalli, Tamil Nadu (User Ground-Truth)",
+    "is_synthetic": false,
+    "perceptual_hash": "f4aa4d2d7ee18862",
+    "cv_prediction": {
+      "predicted_type": "other",
+      "type_confidence_pct": 100.0,
+      "type_probabilities": {
+        "check_dam": 0.0,
+        "farm_pond": 0.0,
+        "bund": 0.0,
+        "contour_trench": 0.0,
+        "other": 100.0
+      },
+      "predicted_condition": "intact",
+      "condition_confidence_pct": 57.7,
+      "condition_probabilities": {
+        "intact": 57.7,
+        "minor_damage": 40.8,
+        "major_damage": 1.4,
+        "non_functional": 0.2
+      },
+      "condition_score": 10.0,
+      "expected_condition_score": 23.3
+    },
+    "photo_url": "/static/reference/trichy/trichy_kollidam_pump_house_aqueduct_09.jpg",
+    "gradcam_url": "/static/reference/gradcam/gradcam_trichy_kollidam_pump_house_aqueduct_09.jpg"
+  }
+]

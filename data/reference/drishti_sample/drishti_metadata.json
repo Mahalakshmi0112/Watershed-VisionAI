@@ -1,0 +1,41 @@
+{
+  "title": "Genuine Bhuvan Drishti Mobile App Field Photograph",
+  "filename": "photo1_fdc_IWMP_IWMPFDC_CivilworkSM_Point_f5c9aaf4d675d947_14_4_7_3_10_2015.jpg",
+  "source_url": "https://bhuvan-app3.nrsc.gov.in/iwmp_fdc/upload/iwmp/iwmp_photos_reorg/3/66/photo1_fdc_IWMP_IWMPFDC_CivilworkSM_Point_f5c9aaf4d675d947_14_4_7_3_10_2015.jpg",
+  "data_provenance": "ISRO/NRSC Bhuvan Drishti Field Data Collection (IWMP Mobile App Archive)",
+  "is_synthetic": false,
+  "is_genuine_nrsc_field_asset": true,
+  "taxonomy_breakdown": {
+    "fdc": "Field Data Collection (Bhuvan Mobile Collector Standard)",
+    "IWMP": "Integrated Watershed Management Programme Scheme",
+    "IWMPFDC": "IWMP Mobile Field Data Collection App Subtype",
+    "CivilworkSM_Point": "Structure Category: Civil Works Soil Moisture (SM) Point Structure",
+    "f5c9aaf4d675d947": "Unique Field Device/Transaction Hash Identifier",
+    "14_4_7_3_10_2015": "Field Capture Timestamp: 03-Oct-2015 14:04:07 IST"
+  },
+  "file_size_bytes": 447747,
+  "perceptual_hash": "968f94880a1a3f7f",
+  "cv_prediction": {
+    "predicted_type": "other",
+    "type_confidence_pct": 96.9,
+    "type_probabilities": {
+      "check_dam": 0.1,
+      "farm_pond": 0.0,
+      "bund": 0.0,
+      "contour_trench": 3.0,
+      "other": 96.9
+    },
+    "predicted_condition": "intact",
+    "condition_confidence_pct": 97.0,
+    "condition_probabilities": {
+      "intact": 97.0,
+      "minor_damage": 2.2,
+      "major_damage": 0.7,
+      "non_functional": 0.1
+    },
+    "condition_score": 10.0,
+    "expected_condition_score": 11.2
+  },
+  "photo_url": "/static/reference/drishti/photo1_real_drishti.jpg",
+  "gradcam_url": "/static/reference/gradcam/gradcam_drishti_photo1.jpg"
+}

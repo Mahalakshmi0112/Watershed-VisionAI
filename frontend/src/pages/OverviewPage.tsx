@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StructureSummary } from '../types';
 import { fetchStructures } from '../services/api';
-import { ShieldAlert, AlertTriangle, CheckCircle, ArrowRight, Layers, Activity, FlaskConical } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, CheckCircle, Layers, Activity, FlaskConical } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+
 
 export const OverviewPage: React.FC = () => {
   const [structures, setStructures] = useState<StructureSummary[]>([]);
@@ -132,9 +133,6 @@ export const OverviewPage: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">High Priority Inspection Targets</h2>
-              <Link to="/queue" className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center hover:underline">
-                View Full Queue <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
             </div>
 
             <div className="space-y-3">

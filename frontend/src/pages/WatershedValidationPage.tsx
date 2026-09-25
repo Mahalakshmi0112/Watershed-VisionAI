@@ -2,7 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import {
   FlaskConical, AlertTriangle, CheckCircle, Info,
   Database, TrendingUp, TrendingDown, Minus,
-  MapPin, Loader2, RefreshCw, Layers, Cpu, Tag
+  MapPin, Loader2, RefreshCw, Layers, Cpu, Tag,
+  ClipboardList, AlertCircle, Sprout, Droplets, ShieldAlert, Eye
 } from 'lucide-react';
 import { fetchLulcChangeStats, fetchStructures, fetchLulcClusters } from '../services/api';
 import { LulcChangeResponse, StructureSummary, LulcClusterItem } from '../types';
@@ -24,17 +25,28 @@ function isInAOI(lat: number, lon: number, bufferDeg = 0.05): boolean {
   );
 }
 
+interface ActionPoint {
+  priority: 'high' | 'medium' | 'low';
+  icon: 'alert' | 'sprout' | 'water' | 'eye' | 'shield';
+  title: string;
+  detail: string;
+  evidence: string;
+}
+
 /**
- * Auto-generate a 3–5 sentence plain-language validation summary from the
- * top-4 LULC changes. Based strictly on API-returned numbers. Uses hedged
- * language ("consistent with", "may indicate") rather than causal claims.
+ * Auto-generate a 3–5 sentence plain-language validation summary AND
+ * officer action points from the LULC change data. Based strictly on
+ * API-returned numbers. Uses hedged language rather than causal claims.
  */
 function generateValidationSummary(
   topChanges: LulcChangeResponse['changes'],
   t0Year: string,
   t1Year: string
-): string {
-  if (topChanges.length === 0) return 'No land-use change data available for summary.';
+): { summary: string; actionPoints: ActionPoint[] } {
+  if (topChanges.length === 0) return {
+    summary: 'No land-use change data available for summary.',
+    actionPoints: []
+  };
 
   const fmt = (n: number) => Math.abs(n).toFixed(2);
   const pct = (n: number) => `${Math.abs(n).toFixed(1)}%`;
@@ -44,6 +56,7 @@ function generateValidationSummary(
 
   const gains = topChanges.filter(c => c.change_sqkm > 0).slice(0, 2);
   const losses = topChanges.filter(c => c.change_sqkm < 0).slice(0, 2);
+  const allChanges = [...topChanges].sort((a, b) => Math.abs(b.change_sqkm) - Math.abs(a.change_sqkm));
 
   const sentences: string[] = [];
 
@@ -84,7 +97,68 @@ function generateValidationSummary(
     `These observations are consistent with evolving agricultural land use in the watershed; they do not establish any direct causal link to specific watershed interventions or schemes without additional field corroboration.`
   );
 
-  return sentences.join(' ');
+  // ── Officer Action Points (derived from real data) ──────────────────
+  const actionPoints: ActionPoint[] = [];
+
+  // AP1: Largest expanding class → verify crop intensification on ground
+  if (gains[0] && Math.abs(gains[0].change_sqkm) >= 1) {
+    actionPoints.push({
+      priority: gains[0].change_pct > 30 ? 'high' : 'medium',
+      icon: 'sprout',
+      title: `Verify ${gains[0].class} expansion on ground`,
+      detail: `LULC data records a +${fmt(gains[0].change_sqkm)} km² (+${pct(gains[0].change_pct)}) gain in ${gains[0].class} between ${t0} and ${t1}. Officers should conduct a transect walk across at least 3 sub-catchments within the AOI to confirm whether this expansion reflects actual cropping activity or misclassification.`,
+      evidence: `Bhuvan LULC 250K: ${gains[0].class} — ${gains[0].t0_area_sqkm.toFixed(2)} km² (${t0}) → ${gains[0].t1_area_sqkm.toFixed(2)} km² (${t1}), Δ +${fmt(gains[0].change_sqkm)} km²`
+    });
+  }
+
+  // AP2: Second gain class if significant
+  if (gains[1] && Math.abs(gains[1].change_sqkm) >= 1) {
+    actionPoints.push({
+      priority: 'medium',
+      icon: 'sprout',
+      title: `Review ${gains[1].class} encroachment into watershed buffer`,
+      detail: `${gains[1].class} increased by ${fmt(gains[1].change_sqkm)} km² (+${pct(gains[1].change_pct)}). Officers should cross-check whether this area falls within the 500 m watershed buffer zone and initiate corrective action if cultivation has encroached on protected riparian land.`,
+      evidence: `Bhuvan LULC 250K: ${gains[1].class} — ${gains[1].t0_area_sqkm.toFixed(2)} km² (${t0}) → ${gains[1].t1_area_sqkm.toFixed(2)} km² (${t1}), Δ +${fmt(gains[1].change_sqkm)} km²`
+    });
+  }
+
+  // AP3: Largest declining class → assess water stress or abandonment risk
+  if (losses[0] && Math.abs(losses[0].change_sqkm) >= 1) {
+    const isWaterRelated = /fallow|waste|scrub|pasture/i.test(losses[0].class);
+    actionPoints.push({
+      priority: Math.abs(losses[0].change_pct) > 40 ? 'high' : 'medium',
+      icon: isWaterRelated ? 'water' : 'alert',
+      title: `Investigate decline of ${losses[0].class} (−${pct(losses[0].change_pct)})`,
+      detail: `${losses[0].class} declined by ${fmt(losses[0].change_sqkm)} km² (−${pct(losses[0].change_pct)}) over the study period. Officers should document whether this is due to ${isWaterRelated ? 'reduced water availability, soil degradation, or over-harvesting of scrub/pasture biomass' : 'conversion to built-up/agricultural use or seasonal crop-cycle shifts'}. Village-level crop-cutting reports should be collated as corroborating evidence.`,
+      evidence: `Bhuvan LULC 250K: ${losses[0].class} — ${losses[0].t0_area_sqkm.toFixed(2)} km² (${t0}) → ${losses[0].t1_area_sqkm.toFixed(2)} km² (${t1}), Δ −${fmt(losses[0].change_sqkm)} km²`
+    });
+  }
+
+  // AP4: Second declining class
+  if (losses[1] && Math.abs(losses[1].change_sqkm) >= 1) {
+    actionPoints.push({
+      priority: 'low',
+      icon: 'eye',
+      title: `Monitor ${losses[1].class} for continued area reduction`,
+      detail: `${losses[1].class} recorded a decline of ${fmt(losses[1].change_sqkm)} km² (−${pct(losses[1].change_pct)}). While not the largest change, this secondary trend warrants monitoring in the next LULC cycle. Officers should flag this class in the annual progress report and schedule a mid-season drone survey if decline continues post-${t1}.`,
+      evidence: `Bhuvan LULC 250K: ${losses[1].class} — ${losses[1].t0_area_sqkm.toFixed(2)} km² (${t0}) → ${losses[1].t1_area_sqkm.toFixed(2)} km² (${t1}), Δ −${fmt(losses[1].change_sqkm)} km²`
+    });
+  }
+
+  // AP5: Overall watershed intensification signal
+  const totalGainSqkm = gains.reduce((s, c) => s + c.change_sqkm, 0);
+  const totalLossSqkm = Math.abs(losses.reduce((s, c) => s + c.change_sqkm, 0));
+  if (totalGainSqkm > 5 && totalLossSqkm > 3) {
+    actionPoints.push({
+      priority: 'high',
+      icon: 'shield',
+      title: 'Conduct soil & water conservation audit across the AOI',
+      detail: `The combined LULC signal — +${totalGainSqkm.toFixed(2)} km² in expanding classes against −${totalLossSqkm.toFixed(2)} km² in declining classes — indicates significant land-use churn between ${t0} and ${t1}. Officers should commission a soil health card survey across all ${topChanges.length} LULC classes and cross-reference with the watershed structure maintenance log to ensure bunds, check dams, and farm ponds are adequate for the observed land-use pattern.`,
+      evidence: `Net expansion: +${totalGainSqkm.toFixed(2)} km² across ${gains.length} gaining class(es). Net contraction: −${totalLossSqkm.toFixed(2)} km² across ${losses.length} losing class(es). Source: Bhuvan LULC 250K, ${t0}–${t1}.`
+    });
+  }
+
+  return { summary: sentences.join(' '), actionPoints };
 }
 
 // ──────────────────────────────────────────────────────────────
@@ -180,9 +254,9 @@ export const WatershedValidationPage: React.FC = () => {
     return structures.filter(s => isInAOI(s.latitude, s.longitude));
   }, [structures]);
 
-  // Auto-generated summary text
-  const summaryText = useMemo(() => {
-    if (!lulcData) return '';
+  // Auto-generated summary text + action points
+  const { summary: summaryText, actionPoints } = useMemo(() => {
+    if (!lulcData) return { summary: '', actionPoints: [] };
     return generateValidationSummary(top4, lulcData.t0_year, lulcData.t1_year);
   }, [top4, lulcData]);
 
@@ -418,7 +492,7 @@ export const WatershedValidationPage: React.FC = () => {
             </div>
           </div>
 
-          {/* ── Auto-Generated Plain-Language Summary ── */}
+          {/* ── Auto-Generated Plain-Language Summary + Officer Action Points ── */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
             <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 flex items-center gap-2">
               <Info className="w-4 h-4 text-sky-500" />
@@ -438,6 +512,81 @@ export const WatershedValidationPage: React.FC = () => {
                 "may indicate" reflect observational interpretation only — not causal attribution to any specific scheme or intervention.
               </p>
             </div>
+
+            {/* ── Officer Action Points ── */}
+            {actionPoints.length > 0 && (
+              <div className="border-t border-gray-100 dark:border-slate-700">
+                <div className="px-6 py-4 flex items-center gap-2 bg-slate-50 dark:bg-slate-900/50">
+                  <ClipboardList className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+                    Officer Action Points
+                  </h3>
+                  <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-semibold">
+                    {actionPoints.length} action{actionPoints.length > 1 ? 's' : ''} derived from Bhuvan LULC data
+                  </span>
+                </div>
+                <div className="divide-y divide-gray-100 dark:divide-slate-700">
+                  {actionPoints.map((ap, idx) => {
+                    const priorityStyle =
+                      ap.priority === 'high'
+                        ? 'border-l-rose-500 bg-rose-50 dark:bg-rose-950/20'
+                        : ap.priority === 'medium'
+                        ? 'border-l-amber-500 bg-amber-50 dark:bg-amber-950/20'
+                        : 'border-l-sky-400 bg-sky-50 dark:bg-sky-950/20';
+                    const priorityBadge =
+                      ap.priority === 'high'
+                        ? 'bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300'
+                        : ap.priority === 'medium'
+                        ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300'
+                        : 'bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300';
+                    const IconComp =
+                      ap.icon === 'alert' ? AlertCircle
+                      : ap.icon === 'sprout' ? Sprout
+                      : ap.icon === 'water' ? Droplets
+                      : ap.icon === 'shield' ? ShieldAlert
+                      : Eye;
+                    return (
+                      <div
+                        key={idx}
+                        className={`px-6 py-5 border-l-4 ${priorityStyle}`}
+                      >
+                        {/* Header row */}
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <div className="flex items-center gap-2">
+                            <IconComp className={`w-4 h-4 flex-shrink-0 ${
+                              ap.priority === 'high' ? 'text-rose-600 dark:text-rose-400'
+                              : ap.priority === 'medium' ? 'text-amber-600 dark:text-amber-400'
+                              : 'text-sky-500 dark:text-sky-400'
+                            }`} />
+                            <p className="text-sm font-bold text-gray-900 dark:text-white">
+                              {idx + 1}. {ap.title}
+                            </p>
+                          </div>
+                          <span className={`flex-shrink-0 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${priorityBadge}`}>
+                            {ap.priority} priority
+                          </span>
+                        </div>
+
+                        {/* Detail */}
+                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed ml-6">
+                          {ap.detail}
+                        </p>
+
+                        {/* Evidence chip */}
+                        <div className="mt-3 ml-6 inline-flex items-center gap-1.5 text-[10px] font-mono px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-500 dark:text-gray-400">
+                          <Database className="w-3 h-3 flex-shrink-0 text-emerald-500" />
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400 mr-1">Evidence:</span>
+                          {ap.evidence}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="px-6 py-3 bg-slate-50 dark:bg-slate-900/50 border-t border-gray-100 dark:border-slate-700 text-[11px] text-gray-400 italic">
+                  Action points are auto-derived from Bhuvan LULC 250K numeric changes. Officers should treat these as data-triggered prompts for field verification, not as administrative orders.
+                </div>
+              </div>
+            )}
           </div>
 
           {/* ── Structures in AOI ── */}
