@@ -2,19 +2,21 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   Sun, Moon, LayoutDashboard, MapPin, Layers, 
-  AlertTriangle, Shield
+  AlertTriangle, Shield, Languages
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { role, switchRole } = useAuth();
+  const { language, toggleLanguage, t } = useLanguage();
 
   const navItems = [
-    { path: '/', label: 'Overview', icon: LayoutDashboard },
-    { path: '/map', label: 'Map View', icon: MapPin },
-    { path: '/alerts', label: 'Predictions & Alerts', icon: AlertTriangle },
+    { path: '/', label: t('nav.overview'), icon: LayoutDashboard },
+    { path: '/map', label: t('nav.map_view'), icon: MapPin },
+    { path: '/alerts', label: t('nav.alerts'), icon: AlertTriangle },
   ];
 
   return (
@@ -57,8 +59,18 @@ export const Navbar: React.FC = () => {
             ))}
           </nav>
 
-          {/* Right Utilities: Role Switcher + Dark Mode */}
+          {/* Right Utilities: Language Switcher + Role Switcher + Dark Mode */}
           <div className="flex items-center space-x-3">
+            {/* Language Switcher */}
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
+              title="Toggle Tamil / English Language"
+            >
+              <Languages className="w-3.5 h-3.5" />
+              <span>{language === 'en' ? 'தமிழ்' : 'English'}</span>
+            </button>
+
             {/* Persona Switcher for live testing */}
             <div className="flex items-center bg-gray-100 dark:bg-slate-800 p-1 rounded-lg border border-gray-200 dark:border-slate-700">
               <Shield className="w-4 h-4 ml-1.5 text-gray-500 dark:text-gray-400" />
@@ -67,7 +79,7 @@ export const Navbar: React.FC = () => {
                 className="px-2 py-1 text-xs font-semibold rounded transition-colors text-gray-700 dark:text-gray-200 hover:text-emerald-600"
                 title="Click to toggle user role persona"
               >
-                Role: <span className="uppercase text-emerald-600 dark:text-emerald-400 font-bold">{role}</span>
+                {t('role.viewing_as')}: <span className="uppercase text-emerald-600 dark:text-emerald-400 font-bold">{role}</span>
               </button>
             </div>
 
@@ -86,3 +98,4 @@ export const Navbar: React.FC = () => {
     </header>
   );
 };
+

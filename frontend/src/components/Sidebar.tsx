@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import {
   Sun, Moon, LayoutDashboard, MapPin,
   AlertTriangle, Layers,
-  ChevronLeft, ChevronRight, Shield, User, FlaskConical, Loader2, Waves
+  ChevronLeft, ChevronRight, Shield, User, FlaskConical, Loader2, Waves,
+  Languages
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { role, switchRole, isLoggingIn } = useAuth();
+  const { language, toggleLanguage, t } = useLanguage();
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
   const navItems = [
-    { path: '/', label: 'Overview', icon: LayoutDashboard, exact: true },
-    { path: '/map', label: 'Map View', icon: MapPin },
-    { path: '/alerts', label: 'Predictions & Alerts', icon: AlertTriangle },
-    { path: '/watershed-validation', label: 'Watershed Validation', icon: FlaskConical },
-    { path: '/secondary-evidence', label: 'Cauvery/Trichy Evidence', icon: Waves },
+    { path: '/', label: t('nav.overview'), icon: LayoutDashboard, exact: true },
+    { path: '/map', label: t('nav.map_view'), icon: MapPin },
+    { path: '/alerts', label: t('nav.alerts'), icon: AlertTriangle },
+    { path: '/watershed-validation', label: t('nav.watershed_validation'), icon: FlaskConical },
+    { path: '/secondary-evidence', label: t('nav.secondary_evidence'), icon: Waves },
   ];
 
   const isActive = (path: string, exact?: boolean) => {
@@ -34,7 +37,7 @@ export const Sidebar: React.FC = () => {
         bg-slate-900 dark:bg-slate-950 text-white
         border-r border-slate-800
         transition-all duration-300 ease-in-out
-        ${collapsed ? 'w-16' : 'w-60'}
+        ${collapsed ? 'w-16' : 'w-64'}
         flex-shrink-0
       `}
     >
@@ -49,7 +52,9 @@ export const Sidebar: React.FC = () => {
               <span className="text-sm font-bold tracking-tight text-white whitespace-nowrap">
                 Watershed<span className="text-emerald-400">Vision</span>
               </span>
-              <span className="block text-[10px] text-slate-400 font-medium tracking-wider uppercase">AI Monitor</span>
+              <span className="block text-[10px] text-slate-400 font-medium tracking-wider uppercase">
+                {t('app.subtitle')}
+              </span>
             </div>
           </div>
         )}
@@ -97,15 +102,36 @@ export const Sidebar: React.FC = () => {
         })}
       </nav>
 
-      {/* Bottom Section: Role + Theme */}
+      {/* Bottom Section: Language + Role + Theme */}
       <div className="border-t border-slate-800 p-3 space-y-2">
+
+        {/* Language Toggle Button */}
+        <button
+          onClick={toggleLanguage}
+          className={`w-full flex items-center rounded-lg py-2 px-2.5 bg-slate-800 hover:bg-emerald-950/60 hover:border-emerald-700/60 border border-slate-700 transition-all text-emerald-400 font-medium ${collapsed ? 'justify-center' : 'justify-between'}`}
+          title={language === 'en' ? 'தமிழில் மாற்றவும் (Switch to Tamil)' : 'Switch to English'}
+        >
+          <div className="flex items-center space-x-2">
+            <Languages className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            {!collapsed && (
+              <span className="text-xs font-semibold text-white">
+                {language === 'en' ? 'Language' : 'மொழி'}
+              </span>
+            )}
+          </div>
+          {!collapsed && (
+            <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-600 text-white shadow-sm tracking-wide">
+              {language === 'en' ? 'தமிழ்' : 'English'}
+            </span>
+          )}
+        </button>
 
         {/* Demo Mode: GEE Info */}
         {!collapsed && (
           <div className="flex items-center space-x-2 px-2 py-1.5 rounded-lg bg-amber-950/40 border border-amber-800/40">
             <FlaskConical className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
             <span className="text-[10px] text-amber-300 font-medium leading-tight">
-              Demo mode — synthetic satellite data active (GEE not configured)
+              {t('demo.mode_notice')}
             </span>
           </div>
         )}
@@ -113,7 +139,7 @@ export const Sidebar: React.FC = () => {
         {/* Role Indicator + Switch */}
         <div
           className={`flex items-center rounded-lg bg-slate-800 border border-slate-700 p-2 ${collapsed ? 'justify-center' : 'space-x-2'}`}
-          title={collapsed ? `Role: ${role}` : undefined}
+          title={collapsed ? `${t('role.viewing_as')}: ${role}` : undefined}
         >
           {isLoggingIn
             ? <Loader2 className="w-4 h-4 text-slate-400 animate-spin flex-shrink-0" />
@@ -123,9 +149,9 @@ export const Sidebar: React.FC = () => {
           }
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Viewing as</p>
+              <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{t('role.viewing_as')}</p>
               <p className={`text-xs font-bold capitalize ${role === 'admin' ? 'text-violet-300' : 'text-sky-300'}`}>
-                {isLoggingIn ? 'Switching…' : role === 'admin' ? 'Admin' : 'Field Officer'}
+                {isLoggingIn ? '...' : role === 'admin' ? t('role.admin') : t('role.field_officer')}
               </p>
             </div>
           )}
@@ -134,9 +160,9 @@ export const Sidebar: React.FC = () => {
               onClick={() => switchRole(role === 'admin' ? 'officer' : 'admin')}
               disabled={isLoggingIn}
               className="text-[10px] text-slate-400 hover:text-white border border-slate-600 rounded px-1.5 py-0.5 transition-colors whitespace-nowrap disabled:opacity-40"
-              title="Switch demo role (re-authenticates with seeded credentials)"
+              title="Switch demo role"
             >
-              Switch
+              {t('role.switch')}
             </button>
           )}
         </div>
@@ -146,17 +172,18 @@ export const Sidebar: React.FC = () => {
           onClick={toggleTheme}
           className={`w-full flex items-center rounded-lg py-2 px-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors ${collapsed ? 'justify-center' : 'space-x-2'}`}
           aria-label="Toggle theme"
-          title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={isDarkMode ? t('theme.light_mode') : t('theme.dark_mode')}
         >
           {isDarkMode
             ? <Sun className="w-4 h-4 text-amber-400 flex-shrink-0" />
             : <Moon className="w-4 h-4 text-slate-400 flex-shrink-0" />
           }
           {!collapsed && (
-            <span className="text-xs">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+            <span className="text-xs">{isDarkMode ? t('theme.light_mode') : t('theme.dark_mode')}</span>
           )}
         </button>
       </div>
     </aside>
   );
 };
+

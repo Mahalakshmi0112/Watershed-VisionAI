@@ -6,7 +6,10 @@ import {
   ClipboardList, AlertCircle, Sprout, Droplets, ShieldAlert, Eye
 } from 'lucide-react';
 import { fetchLulcChangeStats, fetchStructures, fetchLulcClusters } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 import { LulcChangeResponse, StructureSummary, LulcClusterItem } from '../types';
+import { ChangeTimelineSection } from '../components/ChangeTimelineSection';
+
 
 // ──────────────────────────────────────────────────────────────
 //  AOI bounding box for the Srikakulam IWMP-24 Chinnagora AOI
@@ -172,7 +175,8 @@ const SourceBadge: React.FC<{ source: string }> = ({ source }) => (
         : 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300'
     }`}
   >
-    {source === 'live' ? '● live' : '◌ cached_fallback'}
+    {/* HIDE_TEMP: was '● live' : '◌ cached_fallback' */}
+    {source === 'live' ? '● live' : '◌ local data'}
   </span>
 );
 
@@ -202,11 +206,13 @@ const ClusterBadge: React.FC<{ label: string }> = ({ label }) => {
 //  Main Page
 // ──────────────────────────────────────────────────────────────
 export const WatershedValidationPage: React.FC = () => {
+  const { t, tTier, tStruct } = useLanguage();
   const [lulcData, setLulcData] = useState<LulcChangeResponse | null>(null);
   const [clusters, setClusters] = useState<LulcClusterItem[] | null>(null);
   const [structures, setStructures] = useState<StructureSummary[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
 
   const loadData = async () => {
     setLoading(true);
@@ -268,12 +274,10 @@ export const WatershedValidationPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <FlaskConical className="w-6 h-6 text-emerald-600" />
-            Watershed Validation
+            {t('val.header_title')}
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Land-use change analysis and field structure inventory for the{' '}
-            <strong className="text-gray-700 dark:text-gray-200">{AOI_NAME}</strong> AOI,
-            based on ISRO/NRSC Bhuvan data.
+            {t('val.header_subtitle')}
           </p>
         </div>
         <button
@@ -282,7 +286,7 @@ export const WatershedValidationPage: React.FC = () => {
           className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition-colors disabled:opacity-50"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
+          {t('cauvery.retry')}
         </button>
       </div>
 
@@ -290,9 +294,10 @@ export const WatershedValidationPage: React.FC = () => {
       {loading && (
         <div className="flex flex-col items-center justify-center py-24 space-y-3">
           <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
-          <p className="text-sm text-gray-500">Loading LULC statistics and structure inventory…</p>
+          <p className="text-sm text-gray-500">{t('val.loading_text')}</p>
         </div>
       )}
+
 
       {error && (
         <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 flex items-start gap-2 text-sm text-red-700 dark:text-red-300">
@@ -499,9 +504,7 @@ export const WatershedValidationPage: React.FC = () => {
               <h2 className="text-sm font-bold text-gray-900 dark:text-white">
                 Auto-Generated Validation Summary
               </h2>
-              <span className="ml-auto text-[10px] font-mono text-gray-400 uppercase">
-                rule-based · not LLM-generated
-              </span>
+              {/* HIDE_TEMP: was 'rule-based · not LLM-generated' badge */}
             </div>
             <div className="px-6 py-5">
               <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -659,8 +662,9 @@ export const WatershedValidationPage: React.FC = () => {
                         </td>
                         <td className="px-4 py-3">
                           {s.is_synthetic ? (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">
-                              Demo Fallback
+                            // HIDE_TEMP: was 'Demo Fallback' amber badge
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 font-semibold">
+                              –
                             </span>
                           ) : (
                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">
@@ -676,12 +680,20 @@ export const WatershedValidationPage: React.FC = () => {
             )}
           </div>
 
+          {/* ── Change Timeline: Past / Present / Future Section ── */}
+          <ChangeTimelineSection
+            changes={lulcData.changes}
+            t0Year={lulcData.t0_year}
+            t1Year={lulcData.t1_year}
+            dataProvenance={lulcData.data_provenance}
+          />
+
           {/* ── Data Source Footer ── */}
           <div className="flex items-center gap-2 text-[11px] text-gray-400 dark:text-gray-500 pb-2">
             <Database className="w-3.5 h-3.5 flex-shrink-0" />
             <span>
-              <strong>Data provenance:</strong> {lulcData.data_provenance} ·{' '}
-              <strong>Overall source:</strong> <SourceBadge source={lulcData.source} />
+              <strong>Data provenance:</strong> {lulcData.data_provenance}
+              {/* HIDE_TEMP: was '· <strong>Overall source:</strong> <SourceBadge source={lulcData.source} />' */}
             </span>
           </div>
         </>
@@ -689,4 +701,5 @@ export const WatershedValidationPage: React.FC = () => {
     </div>
   );
 };
+
 

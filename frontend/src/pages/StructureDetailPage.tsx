@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { StructureDetail } from '../types';
 import { fetchStructureDetail } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   ArrowLeft, Eye, Activity, CheckCircle, 
   Calendar, Layers, FileText, Image as ImageIcon, FlaskConical
@@ -43,9 +44,11 @@ const GRADCAM_PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(`
 
 export const StructureDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { t, tTier, tStruct, tCond } = useLanguage();
   const [detail, setDetail] = useState<StructureDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [showGradCAM, setShowGradCAM] = useState<boolean>(false);
+
 
   useEffect(() => {
     if (id) {
@@ -113,24 +116,24 @@ export const StructureDetailPage: React.FC = () => {
                 {detail.code}
               </span>
               <span className={`px-3 py-0.5 text-xs font-extrabold rounded-full uppercase ${tierColor}`}>
-                {detail.scores.priority_tier} Tier
+                {tTier(detail.scores.priority_tier)}
               </span>
-              {/* Synthetic data indicator — compact chip, not alarming banner */}
+              {/* Synthetic data indicator */}
               {detail.is_synthetic && (
                 <span className="flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-xs bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-300">
                   <FlaskConical className="w-3 h-3" />
-                  <span>Demo satellite data</span>
+                  <span>{t('overview.demo_data_badge')}</span>
                 </span>
               )}
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Watershed: {detail.watershed_name} • Type: {detail.structure_type.replace('_', ' ')} • Constructed: {detail.construction_year}
+              {t('alerts.watershed')}: {detail.watershed_name} • {t('overview.type')}: {tStruct(detail.structure_type)} • {t('detail.constructed')}: {detail.construction_year}
             </p>
           </div>
         </div>
 
         <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-gray-100 dark:border-slate-700 text-right flex-shrink-0">
-          <span className="text-xs text-gray-400 font-medium">Composite Priority Score</span>
+          <span className="text-xs text-gray-400 font-medium">{t('detail.composite_priority_score')}</span>
           <p className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
             {detail.scores.composite_score}<span className="text-sm text-gray-400 font-normal">/100</span>
           </p>
@@ -145,7 +148,7 @@ export const StructureDetailPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center space-x-2">
               <ImageIcon className="w-5 h-5 text-emerald-600" />
-              <span>Field Photo & Grad-CAM Heatmap</span>
+              <span>{t('detail.field_photo_title')}</span>
             </h2>
 
             {/* Toggle Button */}
@@ -159,7 +162,7 @@ export const StructureDetailPage: React.FC = () => {
               title={showGradCAM ? 'Show original field photo' : 'Show Grad-CAM activation heatmap'}
             >
               <Eye className="w-4 h-4" />
-              <span>{showGradCAM ? 'Grad-CAM ON' : 'Show Grad-CAM'}</span>
+              <span>{showGradCAM ? t('detail.gradcam_on') : t('detail.show_gradcam')}</span>
             </button>
           </div>
 
@@ -194,15 +197,15 @@ export const StructureDetailPage: React.FC = () => {
           {activePhoto && (
             <div className="grid grid-cols-3 gap-3 text-xs bg-gray-50 dark:bg-slate-900 p-3.5 rounded-xl border border-gray-100 dark:border-slate-700">
               <div>
-                <span className="text-gray-400 block">Predicted Class</span>
-                <span className="font-semibold text-gray-900 dark:text-white uppercase">{activePhoto.predicted_type}</span>
+                <span className="text-gray-400 block">{t('detail.predicted_class')}</span>
+                <span className="font-semibold text-gray-900 dark:text-white uppercase">{tStruct(activePhoto.predicted_type)}</span>
               </div>
               <div>
-                <span className="text-gray-400 block">Condition</span>
-                <span className="font-semibold text-gray-900 dark:text-white uppercase">{activePhoto.predicted_condition?.replace('_', ' ')}</span>
+                <span className="text-gray-400 block">{t('detail.condition')}</span>
+                <span className="font-semibold text-gray-900 dark:text-white uppercase">{tCond(activePhoto.predicted_condition || '')}</span>
               </div>
               <div>
-                <span className="text-gray-400 block">Condition Score</span>
+                <span className="text-gray-400 block">{t('detail.condition_score')}</span>
                 <span className="font-semibold text-emerald-600 dark:text-emerald-400">{activePhoto.condition_score}/100</span>
               </div>
             </div>
@@ -216,7 +219,7 @@ export const StructureDetailPage: React.FC = () => {
           <div>
             <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center space-x-2 mb-3">
               <FileText className="w-5 h-5 text-emerald-600" />
-              <span>Field Officer Summary</span>
+              <span>{t('detail.officer_summary')}</span>
             </h2>
             <div className="bg-emerald-50/60 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/40 text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-sans">
               {detail.summary_report}
@@ -225,12 +228,12 @@ export const StructureDetailPage: React.FC = () => {
 
           {/* Composite Score Decomposition Bar */}
           <div>
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3">Multi-Criteria Score Decomposition</h3>
+            <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3">{t('detail.multi_criteria_title')}</h3>
             <div className="space-y-3 text-xs">
               
               <div>
                 <div className="flex justify-between font-semibold mb-1">
-                  <span className="text-gray-600 dark:text-gray-300">CV Structural Damage (45% weight)</span>
+                  <span className="text-gray-600 dark:text-gray-300">{t('detail.cv_damage_weight')}</span>
                   <span className="text-gray-900 dark:text-white">{detail.scores.condition_score}/100</span>
                 </div>
                 <div className="w-full h-2.5 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -240,7 +243,7 @@ export const StructureDetailPage: React.FC = () => {
 
               <div>
                 <div className="flex justify-between font-semibold mb-1">
-                  <span className="text-gray-600 dark:text-gray-300">Satellite Trend Risk (25% weight)</span>
+                  <span className="text-gray-600 dark:text-gray-300">{t('detail.sat_risk_weight')}</span>
                   <span className="text-gray-900 dark:text-white">{detail.scores.satellite_trend_risk}/100</span>
                 </div>
                 <div className="w-full h-2.5 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -250,7 +253,7 @@ export const StructureDetailPage: React.FC = () => {
 
               <div>
                 <div className="flex justify-between font-semibold mb-1">
-                  <span className="text-gray-600 dark:text-gray-300">XGBoost Forecast Failure Risk (30% weight)</span>
+                  <span className="text-gray-600 dark:text-gray-300">{t('detail.xgb_risk_weight')}</span>
                   <span className="text-gray-900 dark:text-white">{detail.scores.forecast_risk}/100</span>
                 </div>
                 <div className="w-full h-2.5 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -269,10 +272,10 @@ export const StructureDetailPage: React.FC = () => {
       <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
           <Activity className="w-5 h-5 text-emerald-600" />
-          <span>Rolling Satellite NDVI / NDWI Time-Series</span>
+          <span>{t('detail.satellite_series_title')}</span>
           {detail.is_synthetic && (
             <span className="ml-2 text-[10px] px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 font-medium">
-              ⚗ Synthetic baseline
+              ⚗ {t('detail.synthetic_baseline')}
             </span>
           )}
         </h2>
@@ -285,8 +288,8 @@ export const StructureDetailPage: React.FC = () => {
               <YAxis domain={[-0.2, 1.0]} />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="ndvi" name="NDVI (Vegetation)" stroke="#22c55e" strokeWidth={2.5} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="ndwi" name="NDWI (Water)" stroke="#3b82f6" strokeWidth={2.5} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="ndvi" name={t('detail.ndvi_label')} stroke="#22c55e" strokeWidth={2.5} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="ndwi" name={t('detail.ndwi_label')} stroke="#3b82f6" strokeWidth={2.5} dot={{ r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -295,3 +298,4 @@ export const StructureDetailPage: React.FC = () => {
     </div>
   );
 };
+

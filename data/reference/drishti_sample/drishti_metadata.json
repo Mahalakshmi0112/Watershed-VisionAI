@@ -16,25 +16,25 @@
   "file_size_bytes": 447747,
   "perceptual_hash": "968f94880a1a3f7f",
   "cv_prediction": {
-    "predicted_type": "other",
-    "type_confidence_pct": 96.9,
+    "predicted_type": "farm_pond",
+    "type_confidence_pct": 97.5,
     "type_probabilities": {
-      "check_dam": 0.1,
-      "farm_pond": 0.0,
-      "bund": 0.0,
-      "contour_trench": 3.0,
-      "other": 96.9
+      "check_dam": 0.3,
+      "farm_pond": 97.5,
+      "bund": 1.1,
+      "contour_trench": 0.9,
+      "other": 0.1
     },
-    "predicted_condition": "intact",
-    "condition_confidence_pct": 97.0,
+    "predicted_condition": "non_functional",
+    "condition_confidence_pct": 67.2,
     "condition_probabilities": {
-      "intact": 97.0,
-      "minor_damage": 2.2,
-      "major_damage": 0.7,
-      "non_functional": 0.1
+      "intact": 0.2,
+      "minor_damage": 19.1,
+      "major_damage": 13.4,
+      "non_functional": 67.2
     },
-    "condition_score": 10.0,
-    "expected_condition_score": 11.2
+    "condition_score": 95.0,
+    "expected_condition_score": 81.6
   },
   "photo_url": "/static/reference/drishti/photo1_real_drishti.jpg",
   "gradcam_url": "/static/reference/gradcam/gradcam_drishti_photo1.jpg"

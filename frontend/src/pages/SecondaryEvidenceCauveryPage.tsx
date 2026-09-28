@@ -13,6 +13,7 @@ import {
   fetchDrishtiSample,
   fetchTrichyPhotos
 } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 import {
   SecondaryEvidenceSummary,
   WbisResponse,
@@ -22,6 +23,7 @@ import {
 } from '../types';
 
 export const SecondaryEvidenceCauveryPage: React.FC = () => {
+  const { t, tTier, tStruct, tCond } = useLanguage();
   const [data, setData] = useState<SecondaryEvidenceSummary | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -67,10 +69,10 @@ export const SecondaryEvidenceCauveryPage: React.FC = () => {
       <div className="flex flex-col items-center justify-center min-h-[70vh] p-8 space-y-4">
         <RefreshCw className="w-10 h-10 text-emerald-500 animate-spin" />
         <p className="text-lg font-semibold text-slate-700 dark:text-slate-300">
-          Loading Secondary Evidence & Real Ground-Truth Data...
+          {t('cauvery.loading_text')}
         </p>
         <p className="text-xs text-slate-500 font-mono">
-          Connecting to ISRO/NRSC Bhuvan WBIS & Thematic Services
+          {t('cauvery.loading_subtext')}
         </p>
       </div>
     );
@@ -90,7 +92,7 @@ export const SecondaryEvidenceCauveryPage: React.FC = () => {
               onClick={loadData}
               className="mt-3 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow transition"
             >
-              Retry Connection
+              {t('cauvery.retry')}
             </button>
           </div>
         </div>
@@ -118,12 +120,10 @@ export const SecondaryEvidenceCauveryPage: React.FC = () => {
               </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Secondary Evidence — <span className="text-sky-600 dark:text-sky-400">Cauvery / Trichy Region</span>
+              {t('cauvery.header_title')}
             </h1>
             <p className="text-sm text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-              Multi-source reference corroboration using live ISRO/NRSC Bhuvan Water Bodies Information System (WBIS),
-              Tamil Nadu state-wide LULC thematic reference charts, official Bhuvan Drishti mobile app archive, and
-              9 personally-collected geo-tagged field photographs with real GPS coordinates.
+              {t('cauvery.header_subtitle')}
             </p>
           </div>
 
@@ -132,28 +132,18 @@ export const SecondaryEvidenceCauveryPage: React.FC = () => {
             className="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition shadow-sm"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>Refresh Live Feeds</span>
+            <span>{t('cauvery.retry')}</span>
           </button>
-        </div>
-
-        {/* Epistemic / Structural Separation Banner */}
-        <div className="p-4 bg-gradient-to-r from-sky-900/10 via-slate-900/5 to-emerald-900/10 dark:from-sky-950/40 dark:via-slate-900/40 dark:to-emerald-950/40 border border-sky-200 dark:border-sky-800/60 rounded-2xl">
-          <div className="flex items-start space-x-3">
-            <Info className="w-5 h-5 text-sky-600 dark:text-sky-400 flex-shrink-0 mt-0.5" />
-            <div className="text-xs space-y-1 text-slate-700 dark:text-slate-300">
-              <span className="font-bold text-slate-900 dark:text-white">Structural Independence Notice:</span> This page contains secondary regional evidence from the Cauvery Basin & Tiruchirappalli (Tamil Nadu). It is strictly isolated and visually separated from the primary Chinnagora AOI (Andhra Pradesh) dataset to preserve clean data provenance and analytical integrity.
-            </div>
-          </div>
         </div>
 
         {/* Navigation Tab Bar */}
         <div className="flex items-center space-x-2 border-b border-slate-200 dark:border-slate-800 pt-2 overflow-x-auto">
           {[
-            { id: 'all', label: 'All Secondary Evidence', icon: Layers },
-            { id: 'wbis', label: '1. WBIS Water Bodies', icon: Waves },
-            { id: 'drishti', label: '2. Drishti Reference Sample', icon: ImageIcon },
-            { id: 'tn_lulc', label: '3. TN LULC Thematic Data', icon: PieIcon },
-            { id: 'trichy', label: '4. Srirangam/Trichy 9 Photos', icon: MapPin },
+            { id: 'all', label: t('cauvery.tab_all'), icon: Layers },
+            { id: 'wbis', label: t('cauvery.tab_wbis'), icon: Waves },
+            { id: 'drishti', label: t('cauvery.tab_drishti'), icon: ImageIcon },
+            { id: 'tn_lulc', label: t('cauvery.tab_tn_lulc'), icon: PieIcon },
+            { id: 'trichy', label: t('cauvery.tab_trichy'), icon: MapPin },
           ].map(tab => (
             <button
               key={tab.id}
@@ -170,6 +160,7 @@ export const SecondaryEvidenceCauveryPage: React.FC = () => {
           ))}
         </div>
       </div>
+
 
       {/* ─────────────────────────────────────────────────────────────
           PART 1: WBIS WATER SPREAD DYNAMICS (CAUVERY BASIN)
